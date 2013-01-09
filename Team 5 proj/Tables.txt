@@ -1,0 +1,111 @@
+EMPLOYEE_LOGIN - 
+
+create table employee_login(username_employee varchar(20) not null,
+password_employee varchar(20) not null, 
+usertype char(1) not null);
+
+
+EMPLOYEE - 
+
+create table employee(emp_id number(4) not null primary key,
+first_name varchar(15),		
+last_name varchar(15),		
+emp_role char(1) not null,
+contact_num number(15),		
+e_mail varchar(30),			
+complaint_id number(5));
+
+PACKAGES - 
+
+create table packages(package_id Number(2) not null primary key,
+package_name varchar(20) not null,
+destination varchar(20) ,	
+package_description varchar(200),	
+flight_name varchar(20),	
+hotel_id number(3),	
+num_days Number,	
+holiday_type char(1),	
+cost_per_person	Number);	
+
+create table users(
+user_id number(6) not null primary key,
+first_name varchar(20) not null,
+middle_name varchar(20),
+last_name varchar(20) not null,
+gender char(1) not null,
+dob date, 
+address varchar(100) not null,
+city varchar(50) not null,
+country varchar(10) not null,
+pin varchar(50) not null,
+phone number(15),
+mobile number(16),
+email varchar(30));
+
+
+create table complaints(
+complaint_id number(5) not null primary key,
+complaint_type char(1) not null,
+Description varchar(500));
+
+constraint users_fk foreign key (user_id) references users (user_id),
+constraint packages_fk foreign key(package_id) references packages(package_id),
+constraint orders_fk foreign key(order_id) references packages(order_id),
+
+create table userlogin(
+username varchar(15) not null primary key,
+password varchar(15) not null);
+
+create table orders(order_id number(7) not null primary key,user_id number(6) not null,
+package_id number(3),start_date date default (sysdate),end_date date default (sysdate),
+flight_name varchar(20),hotel_id number(3),
+num_of_adults number(2),
+num_of_child number(2),
+total_cost number(6));
+constraint fk_userid foreign key (user_id) references users(user_id)
+constraint fk_packageid foreign key (package_id) references packages(package_id)
+constraint fk_flightname foreign key (flight_name) references Flights(flight_name)
+constraint fk_hotelid foreign key (hotel_id) references Hotels(hotel_id)
+
+create table Hotels(
+hotel_id number(3) not null primary key,
+hotel_name varchar(50),
+hotel_location varchar(50),
+hotel_description varchar(500),
+hotel_rating number(1),
+room_type char(1),
+cost_per_room number(6)
+);
+
+create table Feedback(feedback_id number(8) not null primary key,
+feedback_description varchar(100),
+user_id number(6) not null,package_id number(3),flight_name varchar(20),room_type char(1),
+hotel_id number(3));
+constraint fk_hotelid foreign key (hotel_id) references Hotels(hotel_id)
+constraint fk_userid foreign key (user_id) references users(user_id)
+constraint fk_flightname foreign key (flight_name) references Flights(flight_name)
+constraint fk_packageid foreign key (package_id) references packages(package_id)
+
+
+Payment : 
+
+create table payment ( order_id number(7) not null, payment_mode varchar(2) not null, payment_details varchar(100), payment_status char(1), order_status char(1),
+delivery_date date, CONSTRAINT orderid_unique UNIQUE (order_id));
+
+Flights
+
+create table flights (flight_name varchar(7) not null, company_name varchar(20) not null, source varchar(25), destination varchar(25), cost_per_person number,
+CONSTRAINT flname_primary PRIMARY KEY(flight_name));
+
+FlightDate
+
+create table flightdate (flight_name varchar(6) not null, date_of_flight date , time_of_flight date, 
+CONSTRAINT flight_fk FOREIGN KEY (flight_name)
+	  REFERENCES flights(flight_name));
+
+packages
+
+create table packages ( package_id number(2) not null, package_name varchar(20) not null, payment_details varchar(100), payment_status char(1), order_status char(1),
+delivery_date date, CONSTRAINT orderid_unique UNIQUE (order_id));
+
+		
